@@ -99,7 +99,7 @@ def plot_graph(G, save_path):
 
 
 if __name__ == "__main__":
-    nested_layers = """
+    example = """
     graph TD
         subgraph Forest Garden Layers
             C[Canopy Layer]
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         DB --> IS
     """
 
-    G = get_graph_from_json(nested_layers)
+    G = get_graph_from_json(example)
 
     # actual_edge_count = sum(1 for _, _, d in G.edges(data=True) if d.get('label') != 'subgraph')
     # print("Actual edge count (excluding subgraph edges):", actual_edge_count)

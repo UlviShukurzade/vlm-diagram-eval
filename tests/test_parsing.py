@@ -13,10 +13,10 @@ import requests
 
 from tests.fixtures.diagrams import (
     ALL_DIAGRAMS,
-    NESTED_LAYERS,
     MERMAID_CLASS_DIAGRAM,
     MERMAID_YES_NO,
     MINIMAL,
+    NESTED_LAYERS,
     STATE_DIAGRAM,
 )
 from vlm_diagram_eval.parsing.graph import get_graph_from_json

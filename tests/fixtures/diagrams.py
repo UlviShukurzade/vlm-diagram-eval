@@ -51,8 +51,7 @@ MINIMAL = """
         A-->C
     """
 
-NESTED_LAYERS = """
-graph TD
+NESTED_LAYERS = """graph TD
     subgraph Forest Garden Layers
         C[Canopy Layer]
         S[Shrub Layer]
@@ -79,8 +78,7 @@ graph TD
     UI --> ML
     ML --> DS
     DS --> DB
-    DB --> IS
-"""
+    DB --> IS"""
 
 MERMAID_CLASS_DIAGRAM = """classDiagram
   direction LR

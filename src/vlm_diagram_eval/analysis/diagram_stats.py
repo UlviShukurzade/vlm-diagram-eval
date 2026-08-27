@@ -793,67 +793,68 @@ def analyze_complete_dataset(
 def run_example_analysis():
     """Run example analysis with test diagrams."""
 
-    test_diagram = """
-    graph TD
-        subgraph Forest Garden Layers
-            C[Canopy Layer]
-            S[Shrub Layer]
-            H[Herbaceous Layer]
-            R[Root Layer]
-            M[Soil Microbiome]
-        end
-        subgraph System Architecture Layers
-            UI[User Interface]
-            ML[Middle Logic]
-            DS[Data Services]
-            DB[Database]
-            IS[Infrastructure]
-        end
-        C --- UI
-        S --- ML
-        H --- DS
-        R --- DB
-        M --- IS
-        C --> S
-        S --> H
-        H --> R
-        R --> M
-        UI --> ML
-        ML --> DS
-        DS --> DB
-        DB --> IS
-    """
+    test_diagram = """graph TD
+    subgraph Forest Garden Layers
+        C[Canopy Layer]
+        S[Shrub Layer]
+        H[Herbaceous Layer]
+        R[Root Layer]
+        M[Soil Microbiome]
+    end
+    subgraph System Architecture Layers
+        UI[User Interface]
+        ML[Middle Logic]
+        DS[Data Services]
+        DB[Database]
+        IS[Infrastructure]
+    end
+    C --- UI
+    S --- ML
+    H --- DS
+    R --- DB
+    M --- IS
+    C --> S
+    S --> H
+    H --> R
+    R --> M
+    UI --> ML
+    ML --> DS
+    DS --> DB
+    DB --> IS"""
 
-    test_diagram2 = """
-    graph TD
-        subgraph Forest Garden Layers
-            C[Canopy Layer]
-            S[Shrub Layer]
-            H[Herbaceous Layer]
-            R[Root Layer]
-            M[Soil Microbiome]
-        end
-        subgraph System Architecture Layers
-            UI[User Interface]
-            ML[Middle Logic]
-            DS[Data Services]
-            DB[Database]
-            IS[Infrastructure]
-        end
-        C --- UI
-        S --- ML
-        H --- DS
-        R --- DB
-        M --- IS
-        C --> S
-        S --> H
-        H --> R
-        R --> M
-        UI --> ML
-        ML --> DS
-        DS --> DB
-        DB --> IS
-    """
+    test_diagram2 = """flowchart TB
+    subgraph "Internal Processing"
+        direction TB
+        I1[Frame Analysis] --> I2[Compatibility Assessment]
+        I2 --> I3[Integration Possibilities]
+        I3 --> I4[Formulation Design]
+    end
+    subgraph "Entity A Reality Frame"
+        direction TB
+        A1[Ontological Primitives] --> A2[Value Structures]
+        A2 --> A3[Causal Models]
+        A3 --> A4[Priority Rankings]
+    end
+    subgraph "Entity B Reality Frame"
+        direction TB
+        B1[Ontological Primitives] --> B2[Value Structures]
+        B2 --> B3[Causal Models]
+        B3 --> B4[Priority Rankings]
+    end
+    subgraph "Intersubjective Agreement Space"
+        direction TB
+        S1[Shared Primitives] --> S2[Compatible Values]
+        S2 --> S3[Negotiated Causality]
+        S3 --> S4[Balanced Priorities]
+    end
+    A4 --> I1
+    B4 --> I1
+    I4 --> S1
+    style I1 fill:#f9f,stroke:#333
+    style I4 fill:#f9f,stroke:#333
+    style A1 fill:#ccf,stroke:#333
+    style B1 fill:#cfc,stroke:#333
+    style S1 fill:#fcf,stroke:#333"""
 
     print("Analyzing test diagram 1...")
     stats1, graph1 = analyze_single_diagram(test_diagram)
