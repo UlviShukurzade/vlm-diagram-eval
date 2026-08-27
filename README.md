@@ -192,6 +192,11 @@ AZURE_OPENAI_ENDPOINT=https://<your-resource>.openai.azure.com/
 
 See [`CITATION.cff`](CITATION.cff).
 
+## Acknowledgements
+
+Research, methodology, and results are the author's own, from the master's thesis linked above.
+Repository structure, test suite, and documentation were developed with AI assistance (Claude).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
