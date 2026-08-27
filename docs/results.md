@@ -9,9 +9,10 @@ Detail behind the summary in the [README](../README.md). Figures are in
 |---|---|
 | Models | GPT-4.1, GPT-o4-mini |
 | Prompt tiers | `base`, `v1`, `v2`, `v3` (plus `v3-medium` / `v3-high` reasoning effort for o4-mini) |
-| Diagram types | flowchart, graph, state diagram, class diagram |
-| Difficulty strata | Easy, Moderate, Hard |
-| Corpus | ~14,500 Mermaid sources with rendered images |
+| Diagram types | flowchart, graph, state diagram (**class diagrams excluded** — thesis §4.5) |
+| Difficulty strata | Easy (SCI < 12), Moderate (12–25), Hard (SCI > 25) |
+| Corpus | 14,487 scraped → 12,525 filtered → **900 evaluated** (100 per type per tier) |
+| Rendering | 2× scale via Mermaid CLI (`mmdc`) |
 
 Each image is transcribed to Mermaid by the model, parsed to a graph through the containerised
 Mermaid parser, and compared to the ground-truth `.mmd` parsed by the identical path — so parser
@@ -20,7 +21,8 @@ behaviour cancels out and only transcription differences are measured.
 ## Metrics
 
 **`WLSimilarityGrakel`** — Weisfeiler-Lehman subtree kernel (grakel, `n_iter=3`, normalised) over
-node and edge labels. The headline metric: sensitive to both topology and labelling.
+node and edge labels. The refinement depth matches thesis §4.3.1, which fixes h = 3. The headline
+metric: sensitive to both topology and labelling.
 
 **`DirectedSpectralSimilarity` / `UndirectedSpectralSimilarity`** — distance between Laplacian
 spectra. Captures global shape while ignoring node identity, which makes it a useful cross-check
@@ -67,33 +69,58 @@ elaboration appears to help models that are already close, and not to rescue one
 `v1` is consistently the weakest tier for GPT-4.1 — notably worse than `base` — which suggests that
 tier's instructions actively interfere.
 
-## Structural complexity
+## Structural drivers of degradation
 
-Spearman correlation between WL similarity and each component of the structural complexity index
-(GPT-4.1, v3): [`tables/wl_gpt4_v3_correlation.tex`](tables/wl_gpt4_v3_correlation.tex).
+Thesis §6.1 fits a linear regression over all similarity scores across metrics and settings
+(N = 24,300), with heteroscedasticity-robust HC3 standard errors. Predictors: node count, edge
+count, decision count, parent count, model, prompt tier, and metric.
 
-| Component | Spearman ρ |
-|---|---|
-| `sci_edges` | −0.369 |
-| `sci_nodes` | −0.324 |
-| `sci_nesting` | −0.231 |
-| `sci_decisions` | −0.223 |
-| `sci_connectivity` | −0.169 |
+Overall model: F = 244.7, p < 0.001, R² = 0.104.
 
-All five are negative, so every axis of complexity degrades transcription. Edge count leads node
-count, which is the more interesting half: models track *entities* more reliably than the
-*relationships* between them — consistent with `DirectedErrorEvaluator` isolating flipped and
-hallucinated edges as the dominant error modes.
+| Predictor | β | p |
+|---|---|---|
+| Parent count (nesting) | −0.0414 | < 0.001 |
+| Edge count | −0.0317 | < 0.001 |
+| Node count | +0.0194 | < 0.001 |
+| Decision count | +0.0189 | < 0.001 |
+
+Edge count and hierarchical nesting are negative: relational density and structural grouping both
+independently reduce reconstruction quality. Node count and decision count are **positive** once
+edge density is controlled for — which the thesis reads as evidence that raw element count is not
+the difficulty factor. A diagram that grows in nodes without a proportional growth in edges gets
+slightly *easier*.
+
+> **Note on an internal inconsistency.** §6.1 states that edge count "emerges as the strongest
+> negative structural predictor (β = −0.0317)", but reports parent count at β = −0.0414 — larger in
+> magnitude. Unless the claim refers to standardised coefficients, which are not reported, parent
+> count is the stronger negative predictor. Worth resolving before this text is reused in a paper.
 
 Distributions and per-difficulty breakdowns:
 [`figures/sci_components_heatmap.png`](figures/sci_components_heatmap.png),
 [`figures/sci_difficulty_by_component.png`](figures/sci_difficulty_by_component.png),
 [`figures/sci_relative_contribution.png`](figures/sci_relative_contribution.png).
 
+## Structural Complexity Index
+
+Thesis §4.4.2 defines, for a directed graph G = (V, E) with N = |V|, E = |E|, D decision nodes
+(out-degree > 1) and P distinct parent identifiers:
+
+```
+SCI(G) = 0.5·N + 1.0·E + 1.0·(E/N) + 3.0·D + 3.0·P
+```
+
+Difficulty tiers: Easy < 12, Moderate 12–25, Hard > 25.
+
+The reference implementation (`calculate_sci_components`) lives in the thesis working tree's
+`filter_eligible.ipynb` and is **not yet ported into this repository** — see the README's
+limitations note.
+
 ## Significance testing
 
-Mixed-effects model output is in [`tables/anova_model_summary.txt`](tables/anova_model_summary.txt);
-the notebook that produces it is [`../notebooks/anova.ipynb`](../notebooks/anova.ipynb).
+Regression output is in [`tables/anova_model_summary.txt`](tables/anova_model_summary.txt); the
+notebook that produces it is [`../notebooks/anova.ipynb`](../notebooks/anova.ipynb). Note the thesis
+reports OLS with HC3 robust errors — despite the filename, it does not present an ANOVA or a
+mixed-effects model.
 
 ## Reproducing
 

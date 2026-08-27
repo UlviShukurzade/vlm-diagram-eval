@@ -12,7 +12,12 @@ metrics — so the score reflects whether the *structure* survived transcription
 happens to match.
 
 Built for a master's thesis, *AI-Driven Understanding and Evaluation of Technical Diagrams via
-Markup-Based Representations*.
+Markup-Based Representations* (University of Bonn / b-it, 2026).
+
+Corpus: 14,487 human-authored Mermaid diagrams scraped from GitHub, filtered to 12,525, with a
+stratified subset of **900** used for evaluation — 100 per difficulty tier per diagram type.
+Class diagrams are in the corpus but excluded from evaluation: their object-oriented semantics
+differ too much from control-flow topology.
 
 ---
 
@@ -40,7 +45,11 @@ output go through the identical path, so any parser quirk cancels out.
 | `WLSimilarityGrakel` | Weisfeiler-Lehman kernel over labelled nodes and edges — the headline metric |
 | `DirectedSpectralSimilarity` | Laplacian spectrum of the directed graph |
 | `UndirectedSpectralSimilarity` | Same, ignoring edge direction |
-| `DirectedErrorEvaluator` | Interpretable error counts: missing, hallucinated, and **flipped** edges |
+| `DirectedErrorEvaluator` | Directed structural F1 plus error taxonomy: missing, hallucinated, **flipped** |
+
+Matching thesis §4.3: WL captures local neighbourhood consistency, spectral similarity captures
+global connectivity, and directed F1 verifies exact edge-level correctness. WL uses h = 3
+refinement iterations, as specified in §4.3.1.
 
 `DirectedErrorEvaluator` exists because a single aggregate score hides the failure mode that matters
 most in practice — an edge transcribed in the wrong direction. It reports that count separately.
@@ -71,19 +80,19 @@ Nested states and implicit initial/final transitions are where transcription bre
 diagrams but its advantage shrinks — and sometimes reverses — as difficulty rises. On hard
 flowcharts, GPT-4.1's base prompt beats v3.
 
-**Failure tracks structural complexity, not size.** Spearman correlation between WL similarity and
-components of the structural complexity index (GPT-4.1, v3):
+**Relational density, not diagram size, drives failure.** A linear regression over all similarity
+scores (N = 24,300, HC3 robust standard errors; F = 244.7, p < 0.001, R² = 0.104):
 
-| Component | Spearman ρ |
-|---|---|
-| Edges | −0.369 |
-| Nodes | −0.324 |
-| Nesting | −0.231 |
-| Decision points | −0.223 |
-| Connectivity | −0.169 |
+| Predictor | β | Direction |
+|---|---|---|
+| Parent count (nesting) | −0.0414 | negative |
+| Edge count | −0.0317 | negative |
+| Node count | +0.0194 | positive |
+| Decision count | +0.0189 | positive |
 
-Edge count degrades transcription more than node count — models track *entities* better than the
-*relationships* between them.
+Edges and hierarchical nesting reduce similarity. Node and decision counts turn *positive* once
+edge density is controlled for — so raw size is not the difficulty factor; relational and
+hierarchical complexity is.
 
 Figures in [`docs/figures/`](docs/figures), LaTeX tables in [`docs/tables/`](docs/tables).
 
@@ -99,6 +108,8 @@ make test
 
 No API key and no dataset download are needed for the test suite — 24 sample diagrams are committed
 under [`data/sample/`](data/sample), spanning four diagram types and three difficulty levels.
+(Class diagrams are included in the sample for parser coverage, though the thesis excludes them
+from evaluation.)
 
 Scoring one transcription:
 
@@ -113,6 +124,23 @@ print(WLSimilarityGrakel().evaluate(truth, generated))
 
 Every evaluator takes either Mermaid strings or NetworkX graphs, and exposes the same
 `name()` / `evaluate(truth, generated)` pair — so adding a metric means adding one class.
+
+## Thesis coverage
+
+The thesis defines three experiments. This repository currently implements the first in full.
+
+| Thesis section | Covered here |
+|---|---|
+| §4.2 Graph conversion | ✅ `parsing/graph.py` — label normalisation, directed edge induction, NetworkX node-link |
+| §4.3 Similarity measures | ✅ `evaluators/metrics.py` — WL (h = 3), directed/undirected spectral, directed F1 |
+| §5.1 Structural reconstruction (RQ1, RQ2) | ✅ image → Mermaid, all four prompt tiers |
+| §4.4 Structural Complexity Index | ⚠️ prompts and component stats present; the `calculate_sci_components` reference implementation is not yet ported |
+| §5.2 Component quantification (MAE) | ⚠️ prompts present (`quant_*` in `llm/prompts.py`); the MAE pipeline is not ported |
+| §5.3 Modality gap (RQ3) | ⚠️ prompts present (`mermaid_quant_*`); the ΔMAE analysis is not ported |
+
+The missing pieces live in the thesis working tree as `filter_eligible.ipynb`, `6.2.ipynb`, and
+`inference_mermaid2counts/quant_analysis.ipynb`. They are tracked as follow-up work rather than
+silently omitted.
 
 ## Reproducibility
 
@@ -135,7 +163,7 @@ src/vlm_diagram_eval/
 ├── analysis/               # dataset statistics and complexity index
 └── compat.py               # numpy 2 / grakel shim (documented)
 services/mermaid_parser/    # the Dockerised Mermaid parser
-notebooks/                  # evaluation pipeline, ANOVA, worked example
+notebooks/                  # evaluation pipeline, statistics, worked example
 docs/                       # figures and LaTeX tables
 data/sample/                # 24 diagrams, committed
 ```
