@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\caption{Average WL similarity by diagram type and difficulty. For each row, the best prompt tier within each model is bolded.}
+\label{tab:wl_5_1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccccc}
+\toprule
+\textbf{Diagram} & \textbf{Difficulty} & \multicolumn{4}{c}{\textbf{GPT-4.1}} & \multicolumn{5}{c}{\textbf{GPT-o4-mini}} \\
+\cmidrule(lr){3-6}\cmidrule(lr){7-11}
+& & \textbf{base} & \textbf{v1} & \textbf{v2} & \textbf{v3} & \textbf{base} & \textbf{v1} & \textbf{v2} & \textbf{v3-med} & \textbf{v3-high} \\
+\midrule
+\multirow{3}{*}{\textbf{Flowchart}} & Easy & 0.840 & 0.801 & 0.808 & \textbf{0.892} & 0.820 & 0.820 & 0.864 & 0.865 & \textbf{0.888} \\
+ & Moderate & 0.701 & 0.619 & 0.699 & \textbf{0.731} & 0.773 & 0.791 & 0.817 & \textbf{0.850} & 0.818 \\
+ & Hard & \textbf{0.727} & 0.661 & 0.669 & 0.652 & 0.731 & 0.714 & \textbf{0.784} & 0.736 & 0.726 \\
+\addlinespace
+\multirow{3}{*}{\textbf{Graph}} & Easy & 0.860 & 0.804 & 0.763 & \textbf{0.885} & 0.902 & \textbf{0.924} & 0.908 & 0.906 & 0.919 \\
+ & Moderate & 0.774 & 0.703 & 0.792 & \textbf{0.800} & 0.853 & 0.875 & 0.893 & \textbf{0.897} & 0.861 \\
+ & Hard & 0.701 & 0.606 & 0.705 & \textbf{0.763} & 0.768 & 0.760 & 0.769 & \textbf{0.795} & 0.765 \\
+\addlinespace
+\multirow{3}{*}{\textbf{State Diagram}} & Easy & 0.658 & 0.406 & 0.651 & \textbf{0.748} & 0.705 & 0.557 & 0.698 & 0.678 & \textbf{0.722} \\
+ & Moderate & \textbf{0.462} & 0.282 & 0.457 & 0.430 & 0.455 & 0.408 & \textbf{0.504} & 0.484 & 0.481 \\
+ & Hard & 0.332 & 0.200 & \textbf{0.362} & 0.356 & 0.338 & 0.328 & 0.308 & 0.321 & \textbf{0.358} \\
+\addlinespace
+\bottomrule
+\end{tabular}
+}
+\end{table}

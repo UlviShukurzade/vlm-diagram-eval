@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --all-extras
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Build parser service
+        run: docker build -t mermaid-parser-service services/mermaid_parser
+
+      - name: Start parser service
+        run: |
+          docker run -d -p 9595:8000 --name mermaid-parser-instance mermaid-parser-service
+          for i in $(seq 1 30); do
+            curl -sf -X POST http://localhost:9595/diagram \
+              -H 'Content-Type: application/json' \
+              -d '{"code":"graph TD; A-->B;"}' >/dev/null && break
+            sleep 2
+          done
+
+      - name: Test
+        run: uv run pytest

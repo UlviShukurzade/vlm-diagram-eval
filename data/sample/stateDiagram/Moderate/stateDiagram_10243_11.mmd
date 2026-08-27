@@ -1,0 +1,11 @@
+stateDiagram-v2
+    [*] --> Initializing
+    Initializing --> Ready: Load Tools
+    Ready --> Planning: Receive Query
+    Planning --> ToolSelection: Generate Plan
+    ToolSelection --> ToolExecution: Select Tool
+    ToolExecution --> ResultEvaluation: Execute Tool
+    ResultEvaluation --> ToolSelection: Need More Info
+    ResultEvaluation --> ResponseGeneration: Have Answer
+    ResponseGeneration --> Ready: Return Response
+    Ready --> [*]: Shutdown

@@ -1,0 +1,22 @@
+stateDiagram
+    [*] --> Creating
+    Creating --> Idle
+    Idle --> Running : <b>onStart()</b>
+    Idle --> Destroying : EVP_SHOULDEXIT
+    Running --> Idle : DataExportStopSelf()<br><b>onStop()</b>
+    Running --> Destroying : EVP_SHOULDEXIT
+    Destroying --> [*]
+    state Creating {
+        [*] --> [*]: <b>onCreate()</b>
+    }
+    state Idle {
+        [*] --> IdleIteration
+        IdleIteration --> IdleIteration
+    }
+    state Running {
+        [*] --> RunIteration
+        RunIteration --> RunIteration: <b>onIterate()</b>
+    }
+    state Destroying {
+        [*] --> [*]: <b>onDestroy()</b>
+    }

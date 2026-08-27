@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "vlm-diagram-eval: structural evaluation of vision-language model diagram transcription"
+message: "If you use this software or its results, please cite it as below."
+type: software
+authors:
+  - family-names: Shukurzade
+    given-names: Ulvi
+repository-code: "https://github.com/UlviShukurzade/vlm-diagram-eval"
+license: MIT
+version: 0.1.0
+abstract: >-
+  Evaluates how faithfully vision-language models transcribe technical diagrams.
+  Model output is emitted as Mermaid markup, parsed into a graph via Mermaid's own
+  parser running in a pinned container, and compared against ground truth using
+  Weisfeiler-Lehman, spectral, and directed-error metrics.
+keywords:
+  - vision-language models
+  - diagram understanding
+  - graph similarity
+  - Weisfeiler-Lehman kernel
+  - Mermaid
+
+references:
+  - type: thesis
+    title: "AI-Driven Understanding and Evaluation of Technical Diagrams via Markup-Based Representations"
+    authors:
+      - family-names: Shukurzade
+        given-names: Ulvi
+    thesis-type: "Master's thesis"
+    year: 2026

@@ -1,0 +1,17 @@
+flowchart TB
+J(["<br>NTP<br>client :two:<br><br>"])
+H(["<br>Net<br>stack :two:<br><br>"])
+I(["<br>NIC device<br>driver :one: :two:<br><br>"])
+A(["<br>Filesystem<br><br>"])
+B(["<br>SSD<br>driver<br><br>"])
+C(["<br>HTTP<br>webserver<br><br>"])
+D(["<br>Routing :one:<br><br>"])
+E(["<br>Shared<br>memory :one:<br><br>"])
+J-->H
+H-->I
+C-->H
+C-->A
+A-->B
+D-->I
+D-->E
+C-->E

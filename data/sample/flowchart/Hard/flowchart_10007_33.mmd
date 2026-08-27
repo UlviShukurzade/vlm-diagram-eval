@@ -1,0 +1,33 @@
+flowchart TB
+    subgraph "Internal Processing"
+        direction TB
+        I1[Frame Analysis] --> I2[Compatibility Assessment]
+        I2 --> I3[Integration Possibilities]
+        I3 --> I4[Formulation Design]
+    end
+    subgraph "Entity A Reality Frame"
+        direction TB
+        A1[Ontological Primitives] --> A2[Value Structures]
+        A2 --> A3[Causal Models]
+        A3 --> A4[Priority Rankings]
+    end
+    subgraph "Entity B Reality Frame"
+        direction TB
+        B1[Ontological Primitives] --> B2[Value Structures]
+        B2 --> B3[Causal Models]
+        B3 --> B4[Priority Rankings]
+    end
+    subgraph "Intersubjective Agreement Space"
+        direction TB
+        S1[Shared Primitives] --> S2[Compatible Values]
+        S2 --> S3[Negotiated Causality]
+        S3 --> S4[Balanced Priorities]
+    end
+    A4 --> I1
+    B4 --> I1
+    I4 --> S1
+    style I1 fill:#f9f,stroke:#333
+    style I4 fill:#f9f,stroke:#333
+    style A1 fill:#ccf,stroke:#333
+    style B1 fill:#cfc,stroke:#333
+    style S1 fill:#fcf,stroke:#333

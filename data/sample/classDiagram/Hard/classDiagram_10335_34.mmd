@@ -1,0 +1,34 @@
+classDiagram
+    class CVAnalysisController {
+        +analyzeCandidateResume(contentDocumentId, positionId, bypassCache)
+        +saveAnalysisResults(recordId, analysisResults)
+    }
+    class CVAnalysisService {
+        -CACHE_PARTITION_NAME
+        -CACHE_TTL
+        +analyzeCandidateResume(contentDocumentId, positionId, bypassCache)
+        -generateCacheKey(contentDocumentId)
+        -getCachedResults(cacheKey, bypassCache)
+        -saveToCache(cacheKey, results)
+        -getContentVersion(contentDocumentId)
+    }
+    class CVAnalysisHelper {
+        +analyzeResume(cv, positionId)
+        -extractTextFromCV(cv)
+        -parseAIResponse(aiResponse)
+        -getPosition(positionId)
+        -parseSkills(skillsString)
+        -convertToText(cv)
+        -parsePDF(pdfData)
+        -parseWord(wordData)
+    }
+    class OpenAIService {
+        -NAMED_CREDENTIAL
+        -ENDPOINT_PATH
+        -MAX_TOKENS
+        +callOpenAI(prompt, systemPrompt)
+        -validateOpenAISettingsAccess()
+    }
+    CVAnalysisController --> CVAnalysisService
+    CVAnalysisService --> CVAnalysisHelper
+    CVAnalysisHelper --> OpenAIService

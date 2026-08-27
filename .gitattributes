@@ -1,0 +1,3 @@
+# Diagram sources are data. Keep bytes exactly as they are.
+*.mmd -text
+tests/fixtures/diagrams.py -text

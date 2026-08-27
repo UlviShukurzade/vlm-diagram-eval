@@ -1,0 +1,54 @@
+classDiagram
+    class TetrahedralChunk {
+        +ChunkCoord position
+        +BlockStorage* blocks
+        +LightingData* lighting
+        +MetadataStorage* metadata
+        +std::vector<Entity*> entities
+        +ChunkMesh* mesh
+        +bool isModified
+        +bool isGenerated
+        +bool isLoaded
+        +bool isLightingCalculated
+        +bool isMeshGenerated
+        +bool isActive
+        +void initialize()
+        +Block* getBlock(LocalCoord coord)
+        +void setBlock(LocalCoord coord, Block block)
+        +void updateLighting()
+        +void generateMesh()
+        +void markDirty()
+        +void update(float deltaTime)
+        +void save(std::ostream& stream)
+        +void load(std::istream& stream)
+        +bool isVisible(Frustum* frustum)
+    }
+    class BlockStorage {
+        +std::vector<Block> blocks
+        +Block getBlock(LocalCoord coord)
+        +void setBlock(LocalCoord coord, Block block)
+        +uint32_t index(LocalCoord coord)
+        +bool isValidCoord(LocalCoord coord)
+        +void clear()
+        +void optimize()
+    }
+    class ChunkMesh {
+        +Mesh* opaqueMesh
+        +Mesh* transparentMesh
+        +bool isDirty
+        +void generate(TetrahedralChunk* chunk)
+        +void render(Shader* shader)
+        +void destroy()
+        +int getTriangleCount()
+        +void optimizeMesh()
+    }
+    class LightingData {
+        +std::vector<uint8_t> lightLevels
+        +void calculateLighting(TetrahedralChunk* chunk, std::vector<TetrahedralChunk*> neighbors)
+        +void propagateLight(LocalCoord start, LightType type)
+        +uint8_t getLightLevel(LocalCoord coord, LightType type)
+        +void setLightLevel(LocalCoord coord, LightType type, uint8_t level)
+    }
+    TetrahedralChunk o-- BlockStorage
+    TetrahedralChunk o-- ChunkMesh
+    TetrahedralChunk o-- LightingData

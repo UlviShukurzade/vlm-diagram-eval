@@ -1,0 +1,35 @@
+flowchart TD
+    Start([Begin Search]) --> A[User on Finder View]
+    A --> B{Search Type?}
+    B -->|Quick Search| C[Enter Search Term in Global Field]
+    C --> D[Apply Term to All Searchable Fields]
+    B -->|Advanced Search| E[Enter Field-Specific Criteria]
+    E --> F[Build Compound Query]
+    D --> G[Apply Site Context Filter]
+    F --> G
+    G --> H[Execute Database Query]
+    H --> I{Performance Threshold?}
+    I -->|Exceeded| J[Apply Query Optimization]
+    J --> H
+    I -->|Within Limits| K[Process Results]
+    K --> L{Results Count?}
+    L -->|Zero| M[Display No Results Message]
+    L -->|1-25| N[Display Single Page]
+    L -->|>25| O[Paginate Results]
+    M --> P{Refine Search?}
+    P -->|Yes| A
+    P -->|No| Q[Clear Search/Reset]
+    N --> R[Enable Row Actions]
+    O --> R
+    R --> S{User Action?}
+    S -->|Select Row| T[Highlight Selection]
+    S -->|Sort Column| U[Reorder Results]
+    S -->|Change Page| V[Display New Page]
+    S -->|Edit/View| W[Navigate to Form]
+    S -->|Export| X[Generate Export File]
+    Q --> End([End Search])
+    T --> End
+    U --> End
+    V --> End
+    W --> End
+    X --> End

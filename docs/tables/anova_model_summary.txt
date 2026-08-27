@@ -1,0 +1,37 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          wl_similarity   R-squared:                       0.016
+Model:                            OLS   Adj. R-squared:                  0.015
+Method:                 Least Squares   F-statistic:                     16.16
+Date:                Mon, 16 Feb 2026   Prob (F-statistic):           6.32e-24
+Time:                        13:06:31   Log-Likelihood:                -3704.5
+No. Observations:                8100   AIC:                             7427.
+Df Residuals:                    8091   BIC:                             7490.
+Df Model:                           8                                         
+Covariance Type:            nonrobust                                         
+==============================================================================================================
+                                                 coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------------
+Intercept                                      0.6765      0.013     51.182      0.000       0.651       0.702
+C(model)[T.GPT-o4-mini]                        0.0352      0.018      1.926      0.054      -0.001       0.071
+C(tier)[T.v1]                                 -0.1134      0.019     -6.074      0.000      -0.150      -0.077
+C(tier)[T.v2]                                 -0.0225      0.019     -1.193      0.233      -0.060       0.014
+C(tier)[T.v3]                                  0.0189      0.018      1.030      0.303      -0.017       0.055
+C(tier)[T.v3-high]                         -4.244e+08   4.08e+08     -1.041      0.298   -1.22e+09    3.75e+08
+C(tier)[T.v3-med]                          -1.299e+12   1.25e+12     -1.041      0.298   -3.75e+12    1.15e+12
+C(model)[T.GPT-o4-mini]:C(tier)[T.v1]          0.0899      0.025      3.524      0.000       0.040       0.140
+C(model)[T.GPT-o4-mini]:C(tier)[T.v2]          0.0398      0.026      1.560      0.119      -0.010       0.090
+C(model)[T.GPT-o4-mini]:C(tier)[T.v3]          0.0004      0.000      1.041      0.298      -0.000       0.001
+C(model)[T.GPT-o4-mini]:C(tier)[T.v3-high]  4.244e+08   4.08e+08      1.041      0.298   -3.75e+08    1.22e+09
+C(model)[T.GPT-o4-mini]:C(tier)[T.v3-med]   1.299e+12   1.25e+12      1.041      0.298   -1.15e+12    3.75e+12
+==============================================================================
+Omnibus:                     1860.406   Durbin-Watson:                   1.539
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1153.433
+Skew:                          -0.804   Prob(JB):                    3.43e-251
+Kurtosis:                       2.088   Cond. No.                     2.62e+32
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 1.87e-61. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.

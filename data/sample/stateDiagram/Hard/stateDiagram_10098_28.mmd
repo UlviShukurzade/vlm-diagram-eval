@@ -1,0 +1,28 @@
+stateDiagram-v2
+    [*] --> InitialLoad
+    InitialLoad --> ContentLoaded: Data Received
+    state InitialLoad {
+        [*] --> BrandedScreen
+        BrandedScreen --> SkeletonLayout: Framework Loaded
+        SkeletonLayout --> PulsingElements: Layout Ready
+    }
+    state ContentLoaded {
+        [*] --> PartialInteractivity
+        PartialInteractivity --> FullyInteractive: All Resources Loaded
+    }
+    ContentLoaded --> ComponentLoading: User Interaction
+    ComponentLoading --> ContentLoaded: Component Data Received
+    state ComponentLoading {
+        [*] --> MaintainLayout
+        MaintainLayout --> ComponentSkeleton: Prepare Loading State
+        ComponentSkeleton --> ComponentPulsing: Show Loading Animation
+    }
+    classDef initial fill:#E91E63,stroke:#F8BBD0,color:white
+    classDef loading fill:#FFC107,stroke:#FFE082,color:black
+    classDef loaded fill:#4CAF50,stroke:#A5D6A7,color:white
+    classDef component fill:#2196F3,stroke:#90CAF9,color:white
+    class InitialLoad initial
+    class ContentLoaded loaded
+    class ComponentLoading component
+    class BrandedScreen,SkeletonLayout,PulsingElements loading
+    class MaintainLayout,ComponentSkeleton,ComponentPulsing loading

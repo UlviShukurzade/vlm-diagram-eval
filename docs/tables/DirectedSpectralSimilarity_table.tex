@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\caption{Average Directed Spectral similarity by diagram type and difficulty. For each row, the best prompt tier within each model is bolded.}
+\label{tab:spectral_by_type_difficulty}
+\begin{tabular}{llccccccccc}
+\toprule
+\textbf{Diagram} & \textbf{Difficulty} & \multicolumn{4}{c}{\textbf{GPT-4.1}} & \multicolumn{5}{c}{\textbf{GPT-o4-mini}} \\
+\cmidrule(lr){3-6}\cmidrule(lr){7-11}
+& & \textbf{base} & \textbf{v1} & \textbf{v2} & \textbf{v3} & \textbf{base} & \textbf{v1} & \textbf{v2} & \textbf{v3-med} & \textbf{v3-high} \\
+\midrule
+\multirow{3}{*}{\textbf{Flowchart}} & Easy & 0.872 & 0.843 & 0.837 & \textbf{0.936} & 0.855 & 0.927 & 0.899 & 0.915 & \textbf{0.947} \\
+ & Moderate & 0.837 & 0.722 & 0.824 & \textbf{0.906} & 0.892 & 0.909 & 0.935 & \textbf{0.959} & 0.932 \\
+ & Hard & \textbf{0.866} & 0.783 & 0.805 & 0.808 & 0.825 & \textbf{0.887} & 0.868 & 0.868 & 0.858 \\
+\addlinespace
+\multirow{3}{*}{\textbf{Graph}} & Easy & 0.936 & 0.867 & 0.820 & \textbf{0.960} & 0.946 & 0.965 & 0.942 & 0.953 & \textbf{0.969} \\
+ & Moderate & 0.856 & 0.763 & 0.860 & \textbf{0.885} & 0.903 & 0.935 & 0.940 & \textbf{0.952} & 0.925 \\
+ & Hard & 0.862 & 0.714 & 0.875 & \textbf{0.918} & 0.885 & 0.860 & 0.887 & \textbf{0.893} & 0.877 \\
+\addlinespace
+\multirow{3}{*}{\textbf{State Diagram}} & Easy & 0.832 & 0.724 & 0.754 & \textbf{0.903} & 0.795 & 0.785 & 0.761 & 0.840 & \textbf{0.871} \\
+ & Moderate & \textbf{0.742} & 0.623 & 0.661 & 0.682 & 0.624 & 0.700 & 0.698 & \textbf{0.704} & 0.692 \\
+ & Hard & 0.705 & 0.567 & 0.688 & \textbf{0.753} & 0.557 & \textbf{0.666} & 0.541 & 0.620 & 0.651 \\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{table}

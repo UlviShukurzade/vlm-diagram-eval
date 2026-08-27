@@ -1,0 +1,22 @@
+graph LR
+    A[DevSecOps Change Management] --> B[Assessment]
+    B --> C[Planning]
+    C --> D[Implementation]
+    D --> E[Reinforcement]
+    E -->|Continuous Improvement| B
+    B --> B1[Current State Analysis]
+    B --> B2[Stakeholder Mapping]
+    B --> B3[Readiness Assessment]
+    C --> C1[Vision and Roadmap]
+    C --> C2[Communication Strategy]
+    C --> C3[Training Plan]
+    D --> D1[Pilot Initiatives]
+    D --> D2[Tool Integration]
+    D --> D3[Process Redesign]
+    E --> E1[Metrics and Measurement]
+    E --> E2[Recognition and Rewards]
+    E --> E3[Governance Structures]
+    classDef phase fill:#d0e8ff,stroke:#333,stroke-width:1px
+    classDef activity fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class A,B,C,D,E phase
+    class B1,B2,B3,C1,C2,C3,D1,D2,D3,E1,E2,E3 activity

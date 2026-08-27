@@ -1,0 +1,104 @@
+[project]
+name = "vlm-diagram-eval"
+version = "0.1.0"
+description = "Evaluating how faithfully vision-language models transcribe technical diagrams, by parsing their Mermaid output into graphs and scoring structural similarity."
+readme = "README.md"
+requires-python = ">=3.12, <4"
+license = { text = "MIT" }
+authors = [{ name = "Ulvi Shukurzade", email = "ulvi.shukurzade@gmail.com" }]
+keywords = ["mermaid", "diagrams", "graph-similarity", "vision-language-models", "evaluation"]
+
+dependencies = [
+    # graph construction and similarity
+    "networkx>=3.4",
+    "grakel>=0.1.10",
+    "scipy>=1.16.2",
+    "numpy==2.2",
+    # data handling
+    "pandas>=2.3.3",
+    "polars>=1.37.1",
+    "datasets>=3.0",
+    # parser service client
+    "requests>=2.32",
+    # model access
+    "openai>=1.99.1",
+    # figures and progress
+    "matplotlib>=3.10.8",
+    "seaborn>=0.13.2",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "jupyter",
+    "statsmodels>=0.14.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pre-commit>=4.0.1,<5",
+    "nbstripout>=0.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vlm_diagram_eval"]
+
+[tool.uv]
+
+[tool.mypy]
+ignore_missing_imports = true
+pretty = true
+show_error_context = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--showlocals", "--strict-markers"]
+markers = [
+    "needs_parser: requires the Mermaid parser service on :9595 (run `make parser`)",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests", "scripts"]
+
+# Diagram sources are data, not code. Never reformat or "fix" them: whitespace
+# inside Mermaid is content, and altering it changes parse results.
+extend-exclude = ["data/", "tests/fixtures/diagrams.py", "*.mmd"]
+# Honour the exclusions even when a path is named explicitly -- pre-commit passes
+# filenames one by one, which would otherwise bypass extend-exclude entirely.
+force-exclude = true
+
+[tool.ruff.lint]
+extend-select = [
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "E",    # pycodestyle errors
+  "F",    # pyflakes
+  "I",    # isort
+  "S",    # flake8-bandit (security) -- keep this on; it catches hardcoded secrets
+  "SIM",  # flake8-simplify
+  "UP",   # pyupgrade
+  "W",    # pycodestyle warnings
+]
+ignore = [
+  "E501",  # line length is handled by the formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]         # assert is the point of a test
+"notebooks/**" = ["S101", "S112", "E402", "F401", "F841"]  # exploratory by nature
+"scripts/**" = ["S101"]
+# Diagram fixtures are verbatim Mermaid source; whitespace is content, not style.
+"tests/fixtures/diagrams.py" = ["W291", "W293"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

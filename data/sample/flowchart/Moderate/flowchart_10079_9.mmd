@@ -1,0 +1,9 @@
+flowchart LR
+    Dockerfile --> build --> image["Docker Image"] --> run --> container["Docker Container"]
+   image --> push --> registry[Docker Registry]
+   registry --> pull --> image
+   compose[compose.yml] --> services
+   services --> service
+   compose --> image
+   service --> image
+   service --> up --> container

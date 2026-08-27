@@ -1,0 +1,28 @@
+graph TD
+    subgraph Forest Garden Layers
+        C[Canopy Layer]
+        S[Shrub Layer]
+        H[Herbaceous Layer]
+        R[Root Layer]
+        M[Soil Microbiome]
+    end
+    subgraph System Architecture Layers
+        UI[User Interface]
+        ML[Middle Logic]
+        DS[Data Services]
+        DB[Database]
+        IS[Infrastructure]
+    end
+    C --- UI
+    S --- ML
+    H --- DS
+    R --- DB
+    M --- IS
+    C --> S
+    S --> H
+    H --> R
+    R --> M
+    UI --> ML
+    ML --> DS
+    DS --> DB
+    DB --> IS

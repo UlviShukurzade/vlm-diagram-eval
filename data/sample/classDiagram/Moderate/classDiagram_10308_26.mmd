@@ -1,0 +1,26 @@
+classDiagram
+    A <|-- B: label
+    A "1" *-- "1.." C
+    A "*" o-- "0..1" D
+    C <-- E
+    C -- F
+    D <.. G
+    D <|.. H
+    D .. I
+    A: +int i1
+    A: -String s1
+    A: #List~int~ l1
+    A: ~f1(arg) bool
+    A: +f2()*
+    A: +f3()$
+    class B {
+   		<<enumeration>>
+        RED
+        GREEN
+        BLUE
+    }
+    class D {
+    	<<interface>>
+    	int i1
+    	f1()
+    }

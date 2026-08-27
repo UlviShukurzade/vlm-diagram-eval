@@ -1,0 +1,28 @@
+classDiagram
+  class Order {
+    +OrderStatus status
+  }
+  class OrderStatus {
+    <<enumeration>>
+    FAILED
+    PENDING
+    PAID
+  }
+  class PaymentProcessor {
+    <<interface>>
+    -String apiKey
+    #connect(String url, JSON header)
+    +processPayment(Order order) OrderStatus
+  }
+  class Customer {
+    +String name
+  }
+  
+  PaymentProcessor <|-- StripePaymentProcessor
+  PaymentProcessor <|-- PaypalPaymentProcessor
+  Customer <|-- PrivateCustomer
+  Customer <|-- BusinessCustomer
+  
+  Order o-- Customer
+  
+  Car *-- Engine

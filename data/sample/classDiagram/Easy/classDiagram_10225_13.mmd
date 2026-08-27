@@ -1,0 +1,13 @@
+classDiagram
+    class Person {
+        -String name
+        -String address
+        -String phone
+        -String email
+        +isStudent() bool
+        +validate(Person)$ bool
+        }
+    class Student {
+        -Person person
+        }
+    Student --* Person

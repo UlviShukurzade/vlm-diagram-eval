@@ -1,0 +1,50 @@
+# ── Secrets ──────────────────────────────────────────────────────────────
+.env
+.env.local
+*.pem
+*.key
+
+# ── Research data ────────────────────────────────────────────────────────
+# The full dataset lives outside this repo; only data/sample/ is committed.
+*.parquet
+*.jsonl
+*.zip
+Dataset/
+bigdataset_all_data/
+bigdataset_renders_x2/
+numbered_mermaid_compatibles/
+data/**
+!data/sample/
+!data/sample/**
+
+# ── Generated figures and exports ────────────────────────────────────────
+# docs/figures and docs/tables are committed; everything else is regenerated.
+*.png
+*.pdf
+!docs/figures/**
+!docs/tables/**
+
+# ── Python ───────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+pytest.xml
+
+# ── Notebooks ────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── OS / editor ──────────────────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
+*.swp
