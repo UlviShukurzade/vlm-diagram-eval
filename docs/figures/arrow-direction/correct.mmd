@@ -1,0 +1,5 @@
+%% Ground truth: payment is taken before goods ship.
+flowchart LR
+    order[Order placed] --> pay[Payment taken]
+    pay --> ship[Goods shipped]
+    ship --> done[Customer notified]

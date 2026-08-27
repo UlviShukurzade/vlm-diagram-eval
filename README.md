@@ -63,8 +63,32 @@ density is held constant. Bigger diagrams are not harder — more densely *conne
 Nesting is the second negative signal, which is why containers rank second in the table above.
 
 This is why the framework reports flipped, missing, and hallucinated edges as three separate counts
-rather than one score. A reversed arrow inverts the meaning of a diagram while barely moving an
-aggregate similarity number.
+rather than one score — and why it runs four metrics instead of one.
+
+### One arrow, demonstrated
+
+Same four steps. Same three connections. One arrow reversed.
+
+| Ground truth | One edge reversed |
+|---|---|
+| ![correct](docs/figures/arrow-direction/correct.png) | ![flipped](docs/figures/arrow-direction/flipped.png) |
+| payment is taken, *then* goods ship | goods ship, *then* payment is taken |
+
+The second diagram describes a business that ships before it gets paid. Now score it:
+
+| Metric | Score | Verdict |
+|---|---|---|
+| `UndirectedSpectralSimilarity` | **1.000** | perfect — completely blind to it |
+| `DirectedSpectralSimilarity` | 0.993 | a 0.7% penalty for inverting the logic |
+| `WLSimilarityGrakel` | 0.500 | catches it |
+| `DirectedErrorEvaluator` | `flipped = 1` | names it exactly |
+
+A single reversed arrow inverts what the diagram *means* while one metric still calls it a perfect
+match. That is the case for structural, direction-aware, decomposed evaluation rather than one
+aggregate number — and the reason the error taxonomy reports flipped edges as their own count.
+
+Regenerate with `make parser && make render` from
+[`docs/figures/arrow-direction/`](docs/figures/arrow-direction).
 
 ---
 

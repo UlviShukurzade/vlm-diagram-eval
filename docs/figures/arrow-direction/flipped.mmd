@@ -1,0 +1,6 @@
+%% One arrow reversed: goods now ship before payment is taken.
+%% Same four steps, same three connections, opposite business meaning.
+flowchart LR
+    order[Order placed] --> pay[Payment taken]
+    ship[Goods shipped] --> pay
+    ship --> done[Customer notified]
