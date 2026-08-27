@@ -57,22 +57,18 @@ structural components ranks them by how badly each survives the loss of text:
 *Higher is worse. 1.0× means vision cost the model nothing.*
 
 **Arrows rank worst for both models** — the component most damaged by vision, not merely worse than
-nodes. GPT-4.1's edge error nearly doubles; nodes rise by a third; two components
-actually improve slightly.
+nodes. GPT-4.1's edge error rises 76% against 27% for nodes; two components actually improve
+slightly.
 
 The reason is structural. A node is a labelled box: one visible object, and the label alone often
 identifies it. An arrow is a thin line whose meaning depends on three things at once — its start,
-its end, and its direction — none of which is written down anywhere in the image. Lose the text and
-you lose the redundancy that made edges *easier* than nodes to count from source (0.63 vs 1.49 mean
-error).
+its end, and its direction — none of which is written down anywhere in the image. Losing the text
+costs edges the redundancy they relied on more than nodes did.
 
-A regression over all similarity scores confirms it from the other side: edge count is a significant
-**negative** predictor of reconstruction quality, while node count turns **positive** once edge
-density is held constant. Bigger diagrams are not harder — more densely *connected* ones are.
-Nesting is the second negative signal, which is why containers rank second in the table above.
-
-This is why the framework reports flipped, missing, and hallucinated edges as three separate counts
-rather than one score — and why it runs four metrics instead of one.
+The regression under [Results](#results) agrees from the other side, and the containers row above is
+the second negative signal it identifies. This is why the framework reports flipped, missing, and
+hallucinated edges as three separate counts rather than one score — and why it runs four metrics
+instead of one.
 
 ### One arrow, demonstrated
 
@@ -180,9 +176,8 @@ scores (N = 24,300, HC3 robust standard errors; F = 244.7, p < 0.001, R² = 0.10
 | Node count | +0.0194 | positive |
 | Decision count | +0.0189 | positive |
 
-Edges and hierarchical nesting reduce similarity. Node and decision counts turn *positive* once
-edge density is controlled for — so raw size is not the difficulty factor; relational and
-hierarchical complexity is.
+Edges and nesting reduce similarity; node and decision counts turn *positive* once edge density is
+controlled for. Full discussion in [`docs/results.md`](docs/results.md).
 
 Figures in [`docs/figures/`](docs/figures), LaTeX tables in [`docs/tables/`](docs/tables).
 
@@ -247,7 +242,6 @@ Long-lived results need a pinned toolchain, so:
   the `sci_*` components for 36 diagrams across all nine type × difficulty cells;
   `tests/test_quantification.py` recomputes every per-prompt MAE from the raw model responses and
   matches Table 5.13 to 1e-6.
-
 - The renderer uses the thesis's own `mermaid.min.js`, committed byte-for-byte under `vendor/`.
   The mermaid build dominates render output: with it, a re-render of `flowchart_5087_23` is
   3001×452 against the original 3036×450 (~1%, from font metrics); with a released 11.12.2 it is

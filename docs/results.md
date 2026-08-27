@@ -50,9 +50,9 @@ reconstruction quality, while node count turns positive once edge density is hel
 | Models | GPT-4.1, GPT-o4-mini |
 | Prompt tiers | 4 per task: Tier 0 baseline + guardrails, few-shot, self-correction (o4-mini additionally runs Tier 3 at medium and high reasoning effort) |
 | Diagram types | flowchart, graph, state diagram (**class diagrams excluded** — thesis §4.5) |
-| Difficulty strata | Easy (SCI < 12), Moderate (12–25), Hard (SCI > 25) |
+| Difficulty strata | Easy (SCI < 12), Moderate (12–25), Hard (SCI ≥ 25) |
 | Corpus | 14,487 scraped → 12,525 filtered → **900 evaluated** (100 per type per tier) |
-| Rendering | 2× scale via Mermaid CLI (`mmdc`) |
+| Rendering | 2× scale, Mermaid in a headless browser (`scripts/render_diagrams.py`) |
 
 Each image is transcribed to Mermaid by the model, parsed to a graph through the containerised
 Mermaid parser, and compared to the ground-truth `.mmd` parsed by the identical path — so parser
@@ -144,7 +144,6 @@ edge density is controlled for — which the thesis reads as evidence that raw e
 the difficulty factor. A diagram that grows in nodes without a proportional growth in edges gets
 slightly *easier*.
 
-
 Distributions and per-difficulty breakdowns:
 [`figures/sci_components_heatmap.png`](figures/sci_components_heatmap.png),
 [`figures/sci_difficulty_by_component.png`](figures/sci_difficulty_by_component.png),
@@ -159,11 +158,10 @@ Thesis §4.4.2 defines, for a directed graph G = (V, E) with N = |V|, E = |E|, D
 SCI(G) = 0.5·N + 1.0·E + 1.0·(E/N) + 3.0·D + 3.0·P
 ```
 
-Difficulty tiers: Easy < 12, Moderate 12–25, Hard > 25.
+Difficulty tiers: Easy < 12, Moderate 12–25, Hard ≥ 25.
 
-The reference implementation (`calculate_sci_components`) lives in the thesis working tree's
-`filter_eligible.ipynb` and is **not yet ported into this repository** — see the README's
-limitations note.
+Implemented in [`../src/vlm_diagram_eval/analysis/complexity.py`](../src/vlm_diagram_eval/analysis/complexity.py)
+and verified against the published `sci_*` values by `tests/test_complexity.py`.
 
 ## Component quantification and the modality gap
 
