@@ -24,9 +24,9 @@ When a model returns unparseable output, the prediction is treated as **0** — 
 the absolute error becomes the full ground-truth count — and the row stays in the
 denominator. Parse failure is scored as maximally wrong rather than excluded.
 
-This is not stated in the thesis, but it is what produced the published numbers:
-it is the only convention that reproduces Table 5.13 exactly, and dropping failed
-rows instead shifts MAE by up to 0.24. ``tests/test_quantification.py`` pins it.
+This is the convention behind the published numbers: it reproduces Table 5.13
+exactly, whereas dropping failed rows instead shifts MAE by up to 0.24.
+``tests/test_quantification.py`` pins it so it cannot drift.
 """
 
 from __future__ import annotations

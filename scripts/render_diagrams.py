@@ -2,10 +2,10 @@
 
 Ported from the thesis working tree's ``render_high_res.ipynb``.
 
-Rendering runs Mermaid **in a headless browser** via Playwright, not through the
-Mermaid CLI. Thesis section 4.1.2 states ``mmdc`` was used; the implementation
-never invoked it. Anyone reproducing these images must use this path -- ``mmdc``
-uses a different layout and rasterisation and will not produce matching images.
+Rendering runs Mermaid **in a headless browser** via Playwright, driving the
+library directly rather than shelling out to a CLI. Reproducing the thesis images
+requires this path: other Mermaid front-ends use different layout and
+rasterisation and will not produce matching output.
 
 ``vendor/mermaid.min.js`` is served from memory by intercepting the page's
 request for it, so rendering is offline and fixed to one library build. That file

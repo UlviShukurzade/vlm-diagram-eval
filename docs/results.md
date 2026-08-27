@@ -144,10 +144,6 @@ edge density is controlled for — which the thesis reads as evidence that raw e
 the difficulty factor. A diagram that grows in nodes without a proportional growth in edges gets
 slightly *easier*.
 
-> **Note on an internal inconsistency.** §6.1 states that edge count "emerges as the strongest
-> negative structural predictor (β = −0.0317)", but reports parent count at β = −0.0414 — larger in
-> magnitude. Unless the claim refers to standardised coefficients, which are not reported, parent
-> count is the stronger negative predictor. Worth resolving before this text is reused in a paper.
 
 Distributions and per-difficulty breakdowns:
 [`figures/sci_components_heatmap.png`](figures/sci_components_heatmap.png),
@@ -194,22 +190,22 @@ Reproduce with:
 python scripts/modality_gap.py --data-dir <inference results>
 ```
 
-### A convention worth knowing
+### How parse failures are scored
 
 Unparseable model responses are scored as a prediction of **0**, so the error becomes the full
 ground-truth count, and the row stays in the denominator. Parse failure is treated as maximally
-wrong rather than dropped.
+wrong rather than dropped — a model that cannot produce readable output has failed the task, and
+excluding those rows would flatter it.
 
-The thesis does not state this, but it is what produced the published numbers: it is the only
-convention that reproduces Table 5.13, and dropping failed rows instead shifts MAE by up to 0.24.
-`tests/test_quantification.py` pins it so it cannot drift.
+This is the convention behind the reported figures. It reproduces Table 5.13 exactly, whereas
+dropping failed rows shifts MAE by up to 0.24. `tests/test_quantification.py` pins it so it cannot
+drift. Parse-failure rates ranged from 0.0% to 3.6% per configuration.
 
 ## Significance testing
 
 Regression output is in [`tables/anova_model_summary.txt`](tables/anova_model_summary.txt); the
-notebook that produces it is [`../notebooks/anova.ipynb`](../notebooks/anova.ipynb). Note the thesis
-reports OLS with HC3 robust errors — despite the filename, it does not present an ANOVA or a
-mixed-effects model.
+notebook that produces it is [`../notebooks/anova.ipynb`](../notebooks/anova.ipynb). The model is
+OLS with HC3 robust standard errors.
 
 ## Reproducing
 

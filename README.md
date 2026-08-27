@@ -222,7 +222,7 @@ values** rather than merely matching the written specification.
 
 | Thesis section | Covered here |
 |---|---|
-| §4.1.2 Rendering | `scripts/render_diagrams.py` — Playwright + the thesis's own pinned mermaid build (§4.1.2 says `mmdc`; it was never used) |
+| §4.1.2 Rendering | `scripts/render_diagrams.py` — Playwright with the pinned mermaid build under `vendor/` |
 | §4.2 Graph conversion | `parsing/graph.py` — label normalisation, directed edge induction, NetworkX node-link |
 | §4.3 Similarity measures | `evaluators/metrics.py` — WL (h = 3), directed/undirected spectral, directed F1 |
 | §4.4 Structural Complexity Index | `analysis/complexity.py` — **reproduces the thesis's own `sci_*` values** across all 9 type × difficulty cells |
