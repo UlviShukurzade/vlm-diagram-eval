@@ -87,7 +87,17 @@ def parse_counts(raw: Any) -> dict[str, int | None]:
     return blank
 
 
-def absolute_errors(predictions, truth, component: str):
+def _to_count(value: Any) -> float:
+    """Coerce one predicted count to a number, mapping anything unusable to zero."""
+    try:
+        if value is None:
+            return FAILED_PREDICTION
+        return float(value)
+    except (TypeError, ValueError):
+        return FAILED_PREDICTION
+
+
+def absolute_errors(predictions, truth, component: str) -> list[float]:
     """Per-row absolute error for one component, scoring failures as zero.
 
     Args:
@@ -96,33 +106,29 @@ def absolute_errors(predictions, truth, component: str):
         component: A key of :data:`COMPONENT_KEYS`.
 
     Returns:
-        A pandas Series of absolute errors, one per row, with no missing values.
+        Absolute errors, one per row, with no missing values.
     """
-    import pandas as pd
-
     key = COMPONENT_KEYS[component]
-    predicted = pd.to_numeric(pd.Series([p.get(key) for p in predictions], index=truth.index), errors="coerce").fillna(
-        FAILED_PREDICTION
-    )
-    return (predicted - truth).abs()
+    return [abs(_to_count(p.get(key)) - float(t)) for p, t in zip(predictions, truth, strict=True)]
 
 
 def component_mae(frame, prediction_column: str) -> dict[str, float]:
     """Mean absolute error per component for one result file.
 
     Args:
-        frame: DataFrame with the four ground-truth count columns and the model's
-            response column.
+        frame: A polars (or pandas) DataFrame with the four ground-truth count
+            columns and the model's response column.
         prediction_column: Name of the response column (contains "quantification").
 
     Returns:
         ``{component: mae}`` for all four components.
     """
     predictions = [parse_counts(v) for v in frame[prediction_column]]
-    return {
-        component: float(absolute_errors(predictions, frame[component], component).mean())
-        for component in COMPONENT_KEYS
-    }
+    result = {}
+    for component in COMPONENT_KEYS:
+        errors = absolute_errors(predictions, frame[component], component)
+        result[component] = sum(errors) / len(errors) if errors else 0.0
+    return result
 
 
 def parse_failure_rate(frame, prediction_column: str) -> float:

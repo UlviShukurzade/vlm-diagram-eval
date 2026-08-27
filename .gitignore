@@ -49,5 +49,3 @@ pytest.xml
 .vscode/
 *.swp
 
-# Fetched by scripts/render_diagrams.py --fetch-lib (pinned to MERMAID_VERSION)
-vendor/

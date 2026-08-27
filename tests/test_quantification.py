@@ -80,8 +80,8 @@ def test_failed_predictions_score_as_zero_not_dropped():
     Dropping failed rows instead shifts MAE by up to 0.24 and stops Table 5.13
     reproducing, so the convention is pinned here deliberately.
     """
-    pd = pytest.importorskip("pandas")
-    frame = pd.DataFrame(
+    pl = pytest.importorskip("polars")
+    frame = pl.DataFrame(
         {
             "node_count": [10, 20],
             "edge_count": [0, 0],
@@ -97,8 +97,8 @@ def test_failed_predictions_score_as_zero_not_dropped():
 
 
 def test_parse_failure_rate_counts_only_total_failures():
-    pd = pytest.importorskip("pandas")
-    frame = pd.DataFrame({"quantification_v1": ['{"nodes_count": 1}', "garbage", None]})
+    pl = pytest.importorskip("polars")
+    frame = pl.DataFrame({"quantification_v1": ['{"nodes_count": 1}', "garbage", None]})
     assert parse_failure_rate(frame, "quantification_v1") == pytest.approx(2 / 3)
 
 
@@ -172,7 +172,7 @@ def test_every_prompt_tier_is_present_for_both_modalities():
 @pytest.mark.skipif(not RAW_DIR.exists(), reason="raw inference parquets not available")
 def test_recomputes_per_prompt_mae_from_raw_predictions():
     """Recompute every per-prompt MAE from the model responses themselves."""
-    pd = pytest.importorskip("pandas")
+    pl = pytest.importorskip("polars")
     from vlm_diagram_eval.evaluators.quantification import RESULT_FILENAME
 
     short = {"node_count": "node", "edge_count": "edge", "decision_count": "decision", "parent_count": "parent"}
@@ -186,7 +186,7 @@ def test_recomputes_per_prompt_mae_from_raw_predictions():
         key = (match.group("model"), match.group("mode").lower(), match.group("prompt").lower())
         if key not in expected:
             continue
-        frame = pd.read_parquet(path)
+        frame = pl.read_parquet(path)
         mae = component_mae(frame, find_prediction_column(frame.columns))
         for component, name in short.items():
             want = float(expected[key][f"mae_{name}"])

@@ -36,14 +36,14 @@ SHORT = {"node_count": "node", "edge_count": "edge", "decision_count": "decision
 
 def collect(data_dir: Path):
     """Per-file MAE for every result parquet in ``data_dir``."""
-    import pandas as pd
+    import polars as pl
 
     records = []
     for path in sorted(data_dir.glob("*.parquet")):
         match = RESULT_FILENAME.match(path.name)
         if not match:
             continue
-        frame = pd.read_parquet(path)
+        frame = pl.read_parquet(path)
         column = find_prediction_column(frame.columns)
         record = {
             "model": match.group("model"),
@@ -57,7 +57,7 @@ def collect(data_dir: Path):
 
     if not records:
         sys.exit(f"no result parquets matched in {data_dir}")
-    return pd.DataFrame(records)
+    return pl.DataFrame(records)
 
 
 def main() -> None:
@@ -71,22 +71,30 @@ def main() -> None:
     components = [SHORT[k] for k in COMPONENT_KEYS]
 
     if args.csv:
-        df.to_csv(args.csv, index=False)
+        df.write_csv(args.csv)
         print(f"wrote {args.csv}\n")
+
+    import polars as pl
 
     if args.by_prompt:
         print("Per-prompt MAE")
-        print(df.sort_values(["model", "mode", "prompt"]).to_string(index=False))
+        print(df.sort("model", "mode", "prompt"))
         print()
 
+    # Round only for display; the gap is computed from full-precision means so it
+    # does not inherit rounding from the table above.
+    table = df.group_by("model", "mode").agg([pl.col(c).mean().alias(c) for c in components]).sort("model", "mode")
     print("Component MAE by model and modality (averaged across prompt tiers)")
-    table = df.groupby(["model", "mode"])[components].mean()
-    print(table.round(3).to_string())
+    print(table.with_columns([pl.col(c).round(3) for c in components]))
     print()
 
+    image = table.filter(pl.col("mode") == "image2counts").drop("mode")
+    mermaid = table.filter(pl.col("mode") == "mermaid2counts").drop("mode")
+    gap = image.join(mermaid, on="model", suffix="_merm").select(
+        ["model", *[(pl.col(c) - pl.col(f"{c}_merm")).round(3).alias(c) for c in components]]
+    )
     print("Modality gap  delta = MAE_image - MAE_mermaid  (positive: image worse)")
-    gap = (table.xs("image2counts", level="mode") - table.xs("mermaid2counts", level="mode")).round(3)
-    print(gap.to_string())
+    print(gap)
 
 
 if __name__ == "__main__":

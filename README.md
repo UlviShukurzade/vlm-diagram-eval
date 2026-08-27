@@ -158,10 +158,11 @@ Long-lived results need a pinned toolchain, so:
   `tests/test_quantification.py` recomputes every per-prompt MAE from the raw model responses and
   matches Table 5.13 to 1e-6.
 
-**One caveat:** rendered images are *not* byte-reproducible across machines. Mermaid sizes nodes
-from measured text width, so the host font stack changes every dimension — a re-render of
-`flowchart_5087_23` is structurally identical to the thesis original but 4171×565 rather than
-3036×450. Render in a container with pinned fonts if you need pixel-identical inputs.
+- The renderer uses the thesis's own `mermaid.min.js`, committed byte-for-byte under `vendor/`.
+  The mermaid build dominates render output: with it, a re-render of `flowchart_5087_23` is
+  3001×452 against the original 3036×450 (~1%, from font metrics); with a released 11.12.2 it is
+  4171×565 (~37% off). Renders are close but not byte-identical across machines — use a container
+  with pinned fonts if you need exact pixels.
 
 ## Layout
 

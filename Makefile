@@ -22,7 +22,6 @@ parser-stop:  ## Stop and remove the parser service
 	-docker rm -f $(CONTAINER)
 
 render:  ## Render data/sample to PNG (needs playwright + chromium)
-	uv run python scripts/render_diagrams.py --fetch-lib
 	uv run python scripts/render_diagrams.py --input data/sample --output renders
 
 gap:  ## Component MAE and modality gap (set DATA_DIR to the inference results)
