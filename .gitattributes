@@ -1,3 +1,4 @@
 # Diagram sources are data. Keep bytes exactly as they are.
 *.mmd -text
 tests/fixtures/diagrams.py -text
+src/vlm_diagram_eval/llm/prompts.py -text

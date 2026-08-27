@@ -72,7 +72,12 @@ src = ["src", "tests", "scripts"]
 
 # Diagram sources are data, not code. Never reformat or "fix" them: whitespace
 # inside Mermaid is content, and altering it changes parse results.
-extend-exclude = ["data/", "tests/fixtures/diagrams.py", "*.mmd"]
+extend-exclude = [
+  "data/",
+  "tests/fixtures/diagrams.py",
+  "src/vlm_diagram_eval/llm/prompts.py",  # prompt text is experimental data
+  "*.mmd",
+]
 # Honour the exclusions even when a path is named explicitly -- pre-commit passes
 # filenames one by one, which would otherwise bypass extend-exclude entirely.
 force-exclude = true

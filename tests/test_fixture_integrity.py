@@ -66,3 +66,66 @@ def test_sample_mmd_files_match_recorded_checksums():
     failed = [line for line in result.stdout.splitlines() if "FAILED" in line]
     assert not failed, "sample diagrams were modified:\n" + "\n".join(failed)
     assert result.returncode == 0, result.stderr
+
+
+# ── Prompt templates ──────────────────────────────────────────────────────────
+# Prompt text is experimental data: the exact strings produced the thesis results,
+# down to trailing whitespace inside the templates. ruff and pre-commit are
+# configured to skip this file; these digests catch anything that slips past.
+
+PROMPT_DIGESTS = {
+    "base_system": "ca123e0a936abf9f",
+    "base_user": "f4197acbfdacf615",
+    "mermaid_quant_v1_base_system": "a628b3af45604b63",
+    "mermaid_quant_v1_base_user": "407eb5cb27a9a12f",
+    "mermaid_quant_v2_syntactic_system": "67863e1310f03519",
+    "mermaid_quant_v2_syntactic_user": "701fe455526fb969",
+    "mermaid_quant_v3_few_shot_system": "efca09de704bc7c8",
+    "mermaid_quant_v3_few_shot_user": "d376971791b12961",
+    "mermaid_quant_v4_self_correction_system": "f47affb0da4f1b5a",
+    "mermaid_quant_v4_self_correction_user": "1c3058ff76346b49",
+    "quant_v1_base_system": "e30775d8c3375596",
+    "quant_v1_base_user": "d8294fe408f11547",
+    "quant_v2_syntactic_guardrail_system": "9540b3660a876fbe",
+    "quant_v2_syntactic_guardrail_user": "e71cac1920b37951",
+    "quant_v3_few_shot_system": "e0a7e8287e4a2b11",
+    "quant_v3_few_shot_user": "437e59276d155a30",
+    "quant_v4_self_correction_system": "31e5aa0081c25646",
+    "quant_v4_self_correction_user": "27f4b7644c98099a",
+    "v1_syntactic_guardrail_system": "6341a41befc6fc1a",
+    "v1_syntactic_guardrail_user": "3b89477dfb16db14",
+    "v2_few_shot_system": "305a08d669b2d03a",
+    "v2_few_shot_user": "d14b1daa89d85800",
+    "v3_self_correction_system": "b15bb58fd94443d1",
+    "v3_self_correction_user": "49e46e8e46b2c859",
+}
+
+
+@pytest.mark.parametrize("name", sorted(PROMPT_DIGESTS))
+def test_prompt_template_is_unmodified(name):
+    from vlm_diagram_eval.llm import prompts
+
+    value = getattr(prompts, name, None)
+    assert value is not None, f"prompt {name!r} disappeared"
+    assert _digest(value) == PROMPT_DIGESTS[name], (
+        f"Prompt {name!r} changed. These strings are the experimental condition -- "
+        f"altering one invalidates comparison with the thesis results."
+    )
+
+
+def test_all_four_tiers_present_for_each_task():
+    """Four tiers per task: baseline plus guardrails, few-shot, self-correction."""
+    from vlm_diagram_eval.llm import prompts
+
+    names = {n for n in dir(prompts) if not n.startswith("_")}
+    families = {
+        "image->mermaid": [n for n in names if not n.startswith(("quant_", "mermaid_quant_"))],
+        "image->counts": [n for n in names if n.startswith("quant_")],
+        "mermaid->counts": [n for n in names if n.startswith("mermaid_quant_")],
+    }
+    for family, members in families.items():
+        tiers = {m.removesuffix("_system").removesuffix("_user") for m in members}
+        assert len(tiers) == 4, f"{family} has {len(tiers)} tiers, expected 4: {sorted(tiers)}"
+        for tier in tiers:
+            assert f"{tier}_system" in names, f"{tier} missing a system prompt"
+            assert f"{tier}_user" in names, f"{tier} missing a user prompt"

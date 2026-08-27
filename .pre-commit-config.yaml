@@ -7,18 +7,18 @@ repos:
       - id: check-merge-conflict
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: ^(data/|tests/fixtures/diagrams\.py)
+        exclude: ^(data/|tests/fixtures/diagrams\.py|src/vlm_diagram_eval/llm/prompts\.py)
       - id: trailing-whitespace
-        exclude: ^(data/|tests/fixtures/diagrams\.py)
+        exclude: ^(data/|tests/fixtures/diagrams\.py|src/vlm_diagram_eval/llm/prompts\.py)
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
       - id: ruff
         args: [--fix]
-        exclude: ^(data/|tests/fixtures/diagrams\.py)
+        exclude: ^(data/|tests/fixtures/diagrams\.py|src/vlm_diagram_eval/llm/prompts\.py)
       - id: ruff-format
-        exclude: ^(data/|tests/fixtures/diagrams\.py)
+        exclude: ^(data/|tests/fixtures/diagrams\.py|src/vlm_diagram_eval/llm/prompts\.py)
 
   # Strips notebook output so diffs stay reviewable and the repo stays small.
   - repo: https://github.com/kynan/nbstripout
