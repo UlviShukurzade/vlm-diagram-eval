@@ -217,21 +217,21 @@ Every evaluator takes either Mermaid strings or NetworkX graphs, and exposes the
 
 ## Thesis coverage
 
-The thesis defines three experiments. This repository currently implements the first in full.
+All three experiments the thesis defines are implemented here, and two of them **reproduce published
+values** rather than merely matching the written specification.
 
 | Thesis section | Covered here |
 |---|---|
-| §4.2 Graph conversion | ✅ `parsing/graph.py` — label normalisation, directed edge induction, NetworkX node-link |
-| §4.3 Similarity measures | ✅ `evaluators/metrics.py` — WL (h = 3), directed/undirected spectral, directed F1 |
-| §4.1.2 Rendering | ✅ `scripts/render_diagrams.py` — Playwright + pinned mermaid 11.12.2 (the thesis says `mmdc`; it was never used) |
-| §5.1 Structural reconstruction (RQ1, RQ2) | ✅ image → Mermaid, all four prompt tiers |
-| §4.4 Structural Complexity Index | ✅ `analysis/complexity.py` — **verified to reproduce the thesis's own `sci_*` values** across all 9 type × difficulty cells |
-| §5.2 Component quantification (MAE) | ✅ `evaluators/quantification.py` — **reproduces Table 5.13 exactly** from raw model responses |
-| §5.3 Modality gap (RQ3) | ✅ `scripts/modality_gap.py` — every published ΔMAE reproduced |
+| §4.1.2 Rendering | `scripts/render_diagrams.py` — Playwright + the thesis's own pinned mermaid build (§4.1.2 says `mmdc`; it was never used) |
+| §4.2 Graph conversion | `parsing/graph.py` — label normalisation, directed edge induction, NetworkX node-link |
+| §4.3 Similarity measures | `evaluators/metrics.py` — WL (h = 3), directed/undirected spectral, directed F1 |
+| §4.4 Structural Complexity Index | `analysis/complexity.py` — **reproduces the thesis's own `sci_*` values** across all 9 type × difficulty cells |
+| §5.1 Structural reconstruction (RQ1, RQ2) | image → Mermaid, all four prompt tiers |
+| §5.2 Component quantification (MAE) | `evaluators/quantification.py` — **reproduces Table 5.13 exactly** from raw model responses |
+| §5.3 Modality gap (RQ3) | `scripts/modality_gap.py` — every published ΔMAE reproduced |
 
-All three experiments are now implemented, and two of them reproduce published values rather than
-merely matching the specification: SCI regenerates the thesis's own `sci_*` components, and
-quantification regenerates Table 5.13 from the raw model responses.
+The two reproduction claims are enforced by tests, so drift fails the build rather than going
+unnoticed.
 
 ## Reproducibility
 
@@ -284,7 +284,7 @@ See [`CITATION.cff`](CITATION.cff).
 
 ## Acknowledgements
 
-Research, methodology, and results are the author's own, from the master's thesis linked above.
+Research, methodology, and results are the author's own, from the master's thesis named above.
 Repository structure, test suite, and documentation were developed with AI assistance (Claude).
 
 ## License
