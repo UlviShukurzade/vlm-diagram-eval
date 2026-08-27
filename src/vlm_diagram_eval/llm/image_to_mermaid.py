@@ -48,5 +48,5 @@ def extract_mermaid_from_image(image_path: str, model: str = "gpt-4.1-mini") -> 
 
 
 if __name__ == "__main__":
-    result = extract_mermaid_from_image("/home/shu1abt/Desktop/pictureRepresentation/48.png")
+    result = extract_mermaid_from_image("data/sample/48.png")
     print(result)

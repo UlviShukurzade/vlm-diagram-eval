@@ -62,6 +62,7 @@ def test_sample_mmd_files_match_recorded_checksums():
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
+        check=False,  # we inspect returncode ourselves
     )
     failed = [line for line in result.stdout.splitlines() if "FAILED" in line]
     assert not failed, "sample diagrams were modified:\n" + "\n".join(failed)

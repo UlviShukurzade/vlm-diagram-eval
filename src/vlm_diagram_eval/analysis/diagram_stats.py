@@ -866,7 +866,7 @@ def run_example_analysis():
 
 def main():
     """Main function for testing/example usage."""
-    dataset_path = "/home/shu1abt/Desktop/pictureRepresentation/BigBeautifulDiagramDataset"
+    dataset_path = "data/BigBeautifulDiagramDataset"
     # Option 1: Run example analysis
     run_example_analysis()
 

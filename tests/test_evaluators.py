@@ -8,6 +8,8 @@ The core property asserted here is self-similarity: a metric that does not score
 a graph as maximally similar to itself is broken, whatever else it does.
 """
 
+from itertools import pairwise
+
 import networkx as nx
 import pytest
 
@@ -31,7 +33,7 @@ def _chain(n: int = 5) -> nx.DiGraph:
     names = [chr(ord("a") + i) for i in range(n)]
     for name in names:
         g.add_node(name, label=name)
-    for src, dst in zip(names, names[1:], strict=False):
+    for src, dst in pairwise(names):
         g.add_edge(src, dst, label="next")
     return g
 

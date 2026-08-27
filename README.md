@@ -195,3 +195,6 @@ See [`CITATION.cff`](CITATION.cff).
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+`vendor/mermaid.min.js` is a third-party build of [Mermaid](https://github.com/mermaid-js/mermaid),
+also MIT, attributed in [`vendor/README.md`](vendor/README.md).

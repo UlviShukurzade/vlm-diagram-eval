@@ -194,9 +194,11 @@ def main() -> None:
     ap.add_argument("--parquet", type=Path, help="parquet with image_filename and code columns")
     ap.add_argument("--output", type=Path, default=Path("renders"))
     ap.add_argument(
-        "--timeout", type=int, default=SVG_TIMEOUT_MS,
+        "--timeout",
+        type=int,
+        default=SVG_TIMEOUT_MS,
         help=f"ms to wait for each SVG (default {SVG_TIMEOUT_MS}); a couple of large "
-             "flowcharts need more on slower machines",
+        "flowcharts need more on slower machines",
     )
     args = ap.parse_args()
 

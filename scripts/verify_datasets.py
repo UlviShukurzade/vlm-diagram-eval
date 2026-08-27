@@ -56,9 +56,9 @@ def main():
     print("=" * 60)
 
     datasets_to_verify = [
-        ("/home/shu1abt/Desktop/pictureRepresentation/GraphFlowchartDataset", "Combined Graph & Flowchart Dataset"),
-        ("/home/shu1abt/Desktop/pictureRepresentation/Separated_GraphDataset", "Graph Only Dataset"),
-        ("/home/shu1abt/Desktop/pictureRepresentation/Separated_FlowchartDataset", "Flowchart Only Dataset"),
+        ("data/GraphFlowchartDataset", "Combined Graph & Flowchart Dataset"),
+        ("data/Separated_GraphDataset", "Graph Only Dataset"),
+        ("data/Separated_FlowchartDataset", "Flowchart Only Dataset"),
     ]
 
     success_count = 0
