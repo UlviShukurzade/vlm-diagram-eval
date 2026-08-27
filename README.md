@@ -32,26 +32,39 @@ count, connectivity, branching, and nesting depth, so failures can be attributed
 of structure instead of a single opaque number. The same counting task is then run twice — once from
 the image, once from the markup — and the difference isolates what vision itself costs.
 
-## The finding: relationships, not entities
+## The finding: arrows are the weakest link
 
-**Arrows are the bottleneck.** Models track *things* far better than the *connections between
-things*.
+Ask a model to count a diagram's parts twice — once from the Mermaid source, once from a picture of
+the same diagram — and the difference is the price of having to *look*. Doing this for all four
+structural components ranks them by how badly each survives the loss of text:
 
-Moving from markup input to image input, error grows much faster for edges than for nodes:
-
-| Degradation, markup → image | nodes | **edges** |
+| How much error grows when reading a picture instead of the source | GPT-4.1 | GPT-o4-mini |
 |---|---|---|
-| GPT-4.1 | +27% | **+76%** |
-| GPT-o4-mini | +4% | **+20%** |
+| **Edges (arrows)** | **1.8× the error** | **1.2× the error** |
+| Containers (nesting) | 1.5× | 0.9× — slightly better |
+| Nodes | 1.3× | 1.0× — unchanged |
+| Branches (decisions) | 0.8× — slightly better | 1.1× |
 
-A regression over all similarity scores says the same thing from a different direction: edge count
-is a significant *negative* predictor of reconstruction quality, while node count is *positive* once
-edge density is controlled for. Bigger diagrams are not harder — more densely **connected** diagrams
-are. Hierarchical nesting is the other strong negative signal.
+*Higher is worse. 1.0× means vision cost the model nothing.*
 
-This is why the framework reports flipped, missing, and hallucinated edges as separate counts rather
-than folding them into one score: a reversed arrow is a semantic error that aggregate similarity
-measures tend to hide.
+**Arrows rank worst for both models** — the component most damaged by vision, not merely worse than
+nodes. GPT-4.1's edge error nearly doubles; nodes rise by a third; two components
+actually improve slightly.
+
+The reason is structural. A node is a labelled box: one visible object, and the label alone often
+identifies it. An arrow is a thin line whose meaning depends on three things at once — its start,
+its end, and its direction — none of which is written down anywhere in the image. Lose the text and
+you lose the redundancy that made edges *easier* than nodes to count from source (0.63 vs 1.49 mean
+error).
+
+A regression over all similarity scores confirms it from the other side: edge count is a significant
+**negative** predictor of reconstruction quality, while node count turns **positive** once edge
+density is held constant. Bigger diagrams are not harder — more densely *connected* ones are.
+Nesting is the second negative signal, which is why containers rank second in the table above.
+
+This is why the framework reports flipped, missing, and hallucinated edges as three separate counts
+rather than one score. A reversed arrow inverts the meaning of a diagram while barely moving an
+aggregate similarity number.
 
 ---
 

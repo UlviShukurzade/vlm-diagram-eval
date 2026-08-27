@@ -23,11 +23,25 @@ in two modalities isolates the cost of perception from the cost of reasoning.
 
 ### Headline result
 
-Error concentrates on **relationships, not entities**. Going from markup to image, edge-counting
-error grows 76% for GPT-4.1 and 20% for o4-mini, against 27% and 4% for node counting — edges
-degrade roughly three to five times more. The regression in §6.1 agrees from the other side: edge
-count and nesting are negative predictors of reconstruction quality, while node count turns positive
-once edge density is held constant.
+**Arrows are the weakest link.** Running the identical counting task from the source and then from a
+picture gives an error multiplier per component — how much worse the model gets once it has to look:
+
+| Component | GPT-4.1 | GPT-o4-mini |
+|---|---|---|
+| **Edges (arrows)** | **1.8×** | **1.2×** |
+| Containers (nesting) | 1.5× | 0.9× |
+| Nodes | 1.3× | 1.0× |
+| Branches (decisions) | 0.8× | 1.1× |
+
+Higher is worse; 1.0× means vision cost nothing. Edges rank worst for **both** models — the
+component most damaged by the loss of text, not merely worse than nodes. Two components improve
+slightly, which is why the ranking matters more than any single figure.
+
+Note the direction of the effect: from source, edges are *easier* than nodes (MAE 0.63 vs 1.49).
+Vision does not reveal a pre-existing weakness in edge counting; it creates one.
+
+The §6.1 regression agrees from the other side: edge count and nesting are negative predictors of
+reconstruction quality, while node count turns positive once edge density is held constant.
 
 ## Experimental setup
 
