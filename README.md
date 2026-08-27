@@ -16,6 +16,15 @@ reversed.
 That makes diagram understanding a structural-reasoning task wearing the costume of a vision task.
 **A model can recognise every box and label correctly and still reconstruct the wrong system**.
 
+<p align="center">
+  <img src="docs/figures/achilles-heel.jpg" width="620" alt="A hoplite kneeling, struck in the heel by an arrow">
+</p>
+
+**Arrows are the Achilles' heel.** Reading the markup, models count edges *more* accurately than
+nodes — 0.63 against 1.49 mean error. Take the text away and edge error rises three to five times
+faster than node error (GPT-4.1: +76% vs +27%; o4-mini: +20% vs +4%). Edges are not a weakness
+models bring to the task. Vision creates one.
+
 ## The approach: measure, don't fine-tune
 
 The obvious response to a model doing badly is more training data or a fine-tune. This work takes
