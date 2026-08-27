@@ -8,7 +8,7 @@ Detail behind the summary in the [README](../README.md). Figures are in
 | | |
 |---|---|
 | Models | GPT-4.1, GPT-o4-mini |
-| Prompt tiers | `base`, `v1`, `v2`, `v3` (plus `v3-medium` / `v3-high` reasoning effort for o4-mini) |
+| Prompt tiers | 4 per task: Tier 0 baseline + guardrails, few-shot, self-correction (o4-mini additionally runs Tier 3 at medium and high reasoning effort) |
 | Diagram types | flowchart, graph, state diagram (**class diagrams excluded** — thesis §4.5) |
 | Difficulty strata | Easy (SCI < 12), Moderate (12–25), Hard (SCI > 25) |
 | Corpus | 14,487 scraped → 12,525 filtered → **900 evaluated** (100 per type per tier) |
@@ -32,6 +32,20 @@ artefact.
 **`DirectedErrorEvaluator`** — interpretable counts rather than a single score: `Count_Missing`,
 `Count_Hallucinated`, `Count_Flipped`, `Score_F1`, `Score_Jaccard`. Flipped edges are separated out
 because a reversed arrow is a semantic error that aggregate similarity scores tend to hide.
+
+## Prompt tiers
+
+Four tiers per task. The thesis labels them three different ways; the techniques are identical.
+
+| Thesis body | Results tables | Appendix A.2/A.3 | Technique |
+|---|---|---|---|
+| Tier 0 | `base` | V1 | Baseline, zero-shot |
+| Tier 1 | `v1` | V2 | Syntactic / definition guardrails |
+| Tier 2 | `v2` | V3 | Few-shot demonstrations |
+| Tier 3 | `v3` | V4 | Structured self-correction |
+
+The `v3-med` / `v3-high` columns are not extra tiers — they are Tier 3 run at two reasoning-effort
+settings, available only on o4-mini.
 
 ## Average WL similarity
 

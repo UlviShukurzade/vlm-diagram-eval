@@ -1,3 +1,31 @@
+"""Prompt templates for all three thesis experiments.
+
+Four tiers per task -- a zero-shot baseline plus three techniques -- matching
+thesis Chapter 4.5 and Appendix A.
+
+The thesis labels these tiers three different ways, and the variable names below
+follow whichever scheme its own text uses for that task. The techniques align
+exactly; only the numbering shifts.
+
+    Thesis body   Results tables   Appendix A.2/A.3   Technique
+    -----------   --------------   ----------------   ---------------------------
+    Tier 0        base             V1                 Baseline, zero-shot
+    Tier 1        v1               V2                 Syntactic/definition guardrails
+    Tier 2        v2               V3                 Few-shot demonstrations
+    Tier 3        v3               V4                 Structured self-correction
+
+So ``v2_few_shot`` (image-to-Mermaid) and ``quant_v3_few_shot`` (image-to-counts)
+are the *same* technique -- Tier 2 -- despite the different numbers. Read the
+suffix, not the digit.
+
+Families
+    ``base`` / ``v1_`` / ``v2_`` / ``v3_``   image -> Mermaid      (Appendix A.1, RQ1/RQ2)
+    ``quant_v1..v4_``                        image -> counts       (Appendix A.2)
+    ``mermaid_quant_v1..v4_``                Mermaid -> counts     (Appendix A.3, RQ3)
+
+Each tier defines a ``_system`` and a ``_user`` string.
+"""
+
 ### Prompts for image to mermaid translation
 
 base_system = """You are a diagram OCR assistant that extracts Mermaid.js code from images"""
