@@ -14,7 +14,7 @@ branches fork. Two diagrams can look nearly identical and mean opposite things b
 reversed.
 
 That makes diagram understanding a structural-reasoning task wearing the costume of a vision task.
-A model can recognise every box and label correctly and still reconstruct the wrong system.
+**A model can recognise every box and label correctly and still reconstruct the wrong system**.
 
 ## The approach: measure, don't fine-tune
 
