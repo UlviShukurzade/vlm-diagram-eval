@@ -3,6 +3,32 @@
 Detail behind the summary in the [README](../README.md). Figures are in
 [`figures/`](figures), LaTeX source for every table in [`tables/`](tables).
 
+## What is being tested
+
+Diagrams differ from natural images in that their meaning is carried by structure rather than
+appearance. A model can identify every box and read every label correctly and still produce the
+wrong system, because it reversed an arrow or attached a node to the wrong container.
+
+So the question is not "can the model see the diagram" but **which structural properties defeat it**.
+Three experiments answer that:
+
+| Experiment | Question |
+|---|---|
+| §5.1 Reconstruction | Given an image, can the model rebuild the topology? Scored by WL, spectral, and directed F1. |
+| §5.2 Quantification | Can it count nodes, edges, branches, containers? Scored by MAE. |
+| §5.3 Modality gap | How much of the error is vision, rather than reasoning? Same counting task from image vs from markup. |
+
+The third is what makes the other two interpretable: running an identical task on identical content
+in two modalities isolates the cost of perception from the cost of reasoning.
+
+### Headline result
+
+Error concentrates on **relationships, not entities**. Going from markup to image, edge-counting
+error grows 76% for GPT-4.1 and 20% for o4-mini, against 27% and 4% for node counting — edges
+degrade roughly three to five times more. The regression in §6.1 agrees from the other side: edge
+count and nesting are negative predictors of reconstruction quality, while node count turns positive
+once edge density is held constant.
+
 ## Experimental setup
 
 | | |

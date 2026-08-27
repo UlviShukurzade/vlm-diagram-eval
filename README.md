@@ -4,12 +4,56 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-**How faithfully do vision-language models transcribe technical diagrams?**
+**Vision-language models read photographs well. Diagrams are a different problem — and this
+measures exactly where they break.**
 
-This measures it directly. A diagram image goes to a VLM, which returns Mermaid markup. That markup
-is parsed into a graph, and the graph is compared against ground truth using structural similarity
-metrics — so the score reflects whether the *structure* survived transcription, not whether the text
-happens to match.
+A photograph carries its meaning in appearance: textures, objects, scenes. A technical diagram
+carries almost none of its meaning that way. What a flowchart *means* lives in its **structure** —
+which node points to which, which way the arrow runs, what sits inside which container, where the
+branches fork. Two diagrams can look nearly identical and mean opposite things because one arrow is
+reversed.
+
+That makes diagram understanding a structural-reasoning task wearing the costume of a vision task.
+A model can recognise every box and label correctly and still reconstruct the wrong system.
+
+## The approach: measure, don't fine-tune
+
+The obvious response to a model doing badly is more training data or a fine-tune. This work takes
+the other route: build an **evaluation framework** that says precisely *which* structural properties
+defeat current models, and establish it statistically rather than anecdotally.
+
+The mechanism is a round-trip. A model is shown a rendered diagram and asked to emit Mermaid markup.
+Both its answer and the ground-truth source are parsed into attributed graphs by Mermaid's own
+parser, then compared with graph-theoretic similarity measures. The score reflects whether the
+*topology* survived — not whether the wording matched.
+
+Because the comparison is structural, it decomposes. Every diagram is scored on node count, edge
+count, connectivity, branching, and nesting depth, so failures can be attributed to a specific kind
+of structure instead of a single opaque number. The same counting task is then run twice — once from
+the image, once from the markup — and the difference isolates what vision itself costs.
+
+## The finding: relationships, not entities
+
+**Arrows are the bottleneck.** Models track *things* far better than the *connections between
+things*.
+
+Moving from markup input to image input, error grows much faster for edges than for nodes:
+
+| Degradation, markup → image | nodes | **edges** |
+|---|---|---|
+| GPT-4.1 | +27% | **+76%** |
+| GPT-o4-mini | +4% | **+20%** |
+
+A regression over all similarity scores says the same thing from a different direction: edge count
+is a significant *negative* predictor of reconstruction quality, while node count is *positive* once
+edge density is controlled for. Bigger diagrams are not harder — more densely **connected** diagrams
+are. Hierarchical nesting is the other strong negative signal.
+
+This is why the framework reports flipped, missing, and hallucinated edges as separate counts rather
+than folding them into one score: a reversed arrow is a semantic error that aggregate similarity
+measures tend to hide.
+
+---
 
 Built for a master's thesis, *AI-Driven Understanding and Evaluation of Technical Diagrams via
 Markup-Based Representations* (University of Bonn / b-it, 2026).
