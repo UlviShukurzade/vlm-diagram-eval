@@ -1,4 +1,4 @@
-.PHONY: help setup parser parser-stop render test test-fast lint format clean
+.PHONY: help setup parser parser-stop render gap test test-fast lint format clean
 
 IMAGE   := mermaid-parser-service
 CONTAINER := mermaid-parser-instance
@@ -24,6 +24,9 @@ parser-stop:  ## Stop and remove the parser service
 render:  ## Render data/sample to PNG (needs playwright + chromium)
 	uv run python scripts/render_diagrams.py --fetch-lib
 	uv run python scripts/render_diagrams.py --input data/sample --output renders
+
+gap:  ## Component MAE and modality gap (set DATA_DIR to the inference results)
+	uv run python scripts/modality_gap.py --data-dir $(DATA_DIR)
 
 test:  ## Run the full test suite (needs `make parser`)
 	uv run pytest

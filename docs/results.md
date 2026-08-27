@@ -129,6 +129,41 @@ The reference implementation (`calculate_sci_components`) lives in the thesis wo
 `filter_eligible.ipynb` and is **not yet ported into this repository** — see the README's
 limitations note.
 
+## Component quantification and the modality gap
+
+Thesis sections 5.2 and 5.3. Models are asked only to *count* structure — nodes, edges, branches,
+containers — first from an image, then from Mermaid source. The difference isolates what vision
+costs:
+
+    delta_MAE = MAE_image - MAE_mermaid        positive: image-based inference is worse
+
+| Component | GPT-4.1 image | GPT-4.1 mermaid | Δ | o4-mini image | o4-mini mermaid | Δ |
+|---|---|---|---|---|---|---|
+| Nodes | 1.898 | 1.489 | **+0.409** | 1.559 | 1.503 | +0.056 |
+| Edges | 1.113 | 0.634 | **+0.479** | 0.712 | 0.594 | +0.118 |
+| Decisions | 0.498 | 0.594 | −0.096 | 0.233 | 0.212 | +0.021 |
+| Parents | 0.299 | 0.204 | +0.095 | 0.247 | 0.284 | −0.037 |
+
+Nodes and edges carry the gap; decisions and containers are near zero or negative. GPT-4.1's gap is
+roughly seven times o4-mini's on nodes — the stronger text model loses more when forced through
+vision.
+
+Reproduce with:
+
+```bash
+python scripts/modality_gap.py --data-dir <inference results>
+```
+
+### A convention worth knowing
+
+Unparseable model responses are scored as a prediction of **0**, so the error becomes the full
+ground-truth count, and the row stays in the denominator. Parse failure is treated as maximally
+wrong rather than dropped.
+
+The thesis does not state this, but it is what produced the published numbers: it is the only
+convention that reproduces Table 5.13, and dropping failed rows instead shifts MAE by up to 0.24.
+`tests/test_quantification.py` pins it so it cannot drift.
+
 ## Significance testing
 
 Regression output is in [`tables/anova_model_summary.txt`](tables/anova_model_summary.txt); the

@@ -136,12 +136,12 @@ The thesis defines three experiments. This repository currently implements the f
 | §4.1.2 Rendering | ✅ `scripts/render_diagrams.py` — Playwright + pinned mermaid 11.12.2 (the thesis says `mmdc`; it was never used) |
 | §5.1 Structural reconstruction (RQ1, RQ2) | ✅ image → Mermaid, all four prompt tiers |
 | §4.4 Structural Complexity Index | ✅ `analysis/complexity.py` — **verified to reproduce the thesis's own `sci_*` values** across all 9 type × difficulty cells |
-| §5.2 Component quantification (MAE) | ⚠️ prompts present (`quant_*` in `llm/prompts.py`); the MAE pipeline is not ported |
-| §5.3 Modality gap (RQ3) | ⚠️ prompts present (`mermaid_quant_*`); the ΔMAE analysis is not ported |
+| §5.2 Component quantification (MAE) | ✅ `evaluators/quantification.py` — **reproduces Table 5.13 exactly** from raw model responses |
+| §5.3 Modality gap (RQ3) | ✅ `scripts/modality_gap.py` — every published ΔMAE reproduced |
 
-The two remaining gaps live in the thesis working tree as `6.2.ipynb` and
-`inference_mermaid2counts/quant_analysis.ipynb`. They are tracked as follow-up work rather than
-silently omitted.
+All three experiments are now implemented, and two of them reproduce published values rather than
+merely matching the specification: SCI regenerates the thesis's own `sci_*` components, and
+quantification regenerates Table 5.13 from the raw model responses.
 
 ## Reproducibility
 
@@ -153,9 +153,10 @@ Long-lived results need a pinned toolchain, so:
   Node v22.22.0).
 - `uv.lock` is committed and every runtime import is a declared dependency.
 - Tests touch no network beyond the local container.
-- SCI is verified against the thesis's own published values, not just its formula —
-  `tests/test_complexity.py` re-derives the `sci_*` components for 36 diagrams spanning all
-  nine type × difficulty cells and asserts they match to 1e-6.
+- Two published results are verified, not just implemented. `tests/test_complexity.py` re-derives
+  the `sci_*` components for 36 diagrams across all nine type × difficulty cells;
+  `tests/test_quantification.py` recomputes every per-prompt MAE from the raw model responses and
+  matches Table 5.13 to 1e-6.
 
 **One caveat:** rendered images are *not* byte-reproducible across machines. Mermaid sizes nodes
 from measured text width, so the host font stack changes every dimension — a re-render of
