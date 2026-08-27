@@ -1,4 +1,4 @@
-.PHONY: help setup parser parser-stop test test-fast lint format clean
+.PHONY: help setup parser parser-stop render test test-fast lint format clean
 
 IMAGE   := mermaid-parser-service
 CONTAINER := mermaid-parser-instance
@@ -20,6 +20,10 @@ parser:  ## Build and start the Mermaid parser service on :$(PORT)
 
 parser-stop:  ## Stop and remove the parser service
 	-docker rm -f $(CONTAINER)
+
+render:  ## Render data/sample to PNG (needs playwright + chromium)
+	uv run python scripts/render_diagrams.py --fetch-lib
+	uv run python scripts/render_diagrams.py --input data/sample --output renders
 
 test:  ## Run the full test suite (needs `make parser`)
 	uv run pytest

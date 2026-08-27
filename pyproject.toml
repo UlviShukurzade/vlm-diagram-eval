@@ -33,6 +33,9 @@ notebooks = [
     "jupyter",
     "statsmodels>=0.14.6",
 ]
+render = [
+    "playwright>=1.62.0",
+]
 
 [dependency-groups]
 dev = [

@@ -133,12 +133,13 @@ The thesis defines three experiments. This repository currently implements the f
 |---|---|
 | §4.2 Graph conversion | ✅ `parsing/graph.py` — label normalisation, directed edge induction, NetworkX node-link |
 | §4.3 Similarity measures | ✅ `evaluators/metrics.py` — WL (h = 3), directed/undirected spectral, directed F1 |
+| §4.1.2 Rendering | ✅ `scripts/render_diagrams.py` — Playwright + pinned mermaid 11.12.2 (the thesis says `mmdc`; it was never used) |
 | §5.1 Structural reconstruction (RQ1, RQ2) | ✅ image → Mermaid, all four prompt tiers |
-| §4.4 Structural Complexity Index | ⚠️ prompts and component stats present; the `calculate_sci_components` reference implementation is not yet ported |
+| §4.4 Structural Complexity Index | ✅ `analysis/complexity.py` — **verified to reproduce the thesis's own `sci_*` values** across all 9 type × difficulty cells |
 | §5.2 Component quantification (MAE) | ⚠️ prompts present (`quant_*` in `llm/prompts.py`); the MAE pipeline is not ported |
 | §5.3 Modality gap (RQ3) | ⚠️ prompts present (`mermaid_quant_*`); the ΔMAE analysis is not ported |
 
-The missing pieces live in the thesis working tree as `filter_eligible.ipynb`, `6.2.ipynb`, and
+The two remaining gaps live in the thesis working tree as `6.2.ipynb` and
 `inference_mermaid2counts/quant_analysis.ipynb`. They are tracked as follow-up work rather than
 silently omitted.
 
@@ -152,6 +153,14 @@ Long-lived results need a pinned toolchain, so:
   Node v22.22.0).
 - `uv.lock` is committed and every runtime import is a declared dependency.
 - Tests touch no network beyond the local container.
+- SCI is verified against the thesis's own published values, not just its formula —
+  `tests/test_complexity.py` re-derives the `sci_*` components for 36 diagrams spanning all
+  nine type × difficulty cells and asserts they match to 1e-6.
+
+**One caveat:** rendered images are *not* byte-reproducible across machines. Mermaid sizes nodes
+from measured text width, so the host font stack changes every dimension — a re-render of
+`flowchart_5087_23` is structurally identical to the thesis original but 4171×565 rather than
+3036×450. Render in a container with pinned fonts if you need pixel-identical inputs.
 
 ## Layout
 
